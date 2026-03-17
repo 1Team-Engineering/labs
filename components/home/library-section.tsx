@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { BookOpen } from 'lucide-react';
@@ -25,7 +26,6 @@ function formatDate(dateStr: string): string {
 }
 
 export function LibrarySection() {
-  const router = useRouter();
   const [classrooms, setClassrooms] = useState<LibraryClassroom[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -85,9 +85,7 @@ export function LibrarySection() {
         </div>
       )}
 
-      {!loading && error && (
-        <p className="text-sm text-destructive text-center py-8">{error}</p>
-      )}
+      {!loading && error && <p className="text-sm text-destructive text-center py-8">{error}</p>}
 
       {!loading && !error && classrooms.length === 0 && (
         <p className="text-sm text-muted-foreground text-center py-8">
@@ -98,14 +96,12 @@ export function LibrarySection() {
       {!loading && !error && classrooms.length > 0 && (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
           {classrooms.map((classroom) => (
-            <Card
-              key={classroom.id}
-              className="flex flex-col hover:shadow-md transition-shadow cursor-pointer"
-              onClick={() => router.push(`/classroom/${classroom.id}`)}
-            >
+            <Card key={classroom.id} className="flex flex-col hover:shadow-md transition-shadow">
               <CardHeader className="pb-2">
                 <CardTitle className="text-[15px] font-medium leading-snug line-clamp-2">
-                  {classroom.title}
+                  <Link href={`/classroom/${classroom.id}`} className="hover:underline">
+                    {classroom.title}
+                  </Link>
                 </CardTitle>
               </CardHeader>
               <CardContent className="flex-1 pb-2">
@@ -114,15 +110,8 @@ export function LibrarySection() {
                 </p>
               </CardContent>
               <CardFooter>
-                <Button
-                  size="sm"
-                  variant="secondary"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    router.push(`/classroom/${classroom.id}`);
-                  }}
-                >
-                  Open
+                <Button size="sm" variant="secondary" asChild>
+                  <Link href={`/classroom/${classroom.id}`}>Open</Link>
                 </Button>
               </CardFooter>
             </Card>
