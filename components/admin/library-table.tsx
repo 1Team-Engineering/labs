@@ -31,7 +31,7 @@ export function LibraryTable() {
       const res = await fetch('/api/admin/library');
       if (!res.ok) throw new Error('Failed to load library');
       const data = await res.json();
-      setItems(data);
+      setItems(data.classrooms ?? []);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error');
     } finally {
@@ -43,9 +43,7 @@ export function LibraryTable() {
     const newValue = !item.published;
 
     // Optimistic update
-    setItems((prev) =>
-      prev.map((i) => (i.id === item.id ? { ...i, published: newValue } : i)),
-    );
+    setItems((prev) => prev.map((i) => (i.id === item.id ? { ...i, published: newValue } : i)));
     setTogglingIds((prev) => new Set(prev).add(item.id));
 
     try {
@@ -101,9 +99,7 @@ export function LibraryTable() {
 
   if (items.length === 0) {
     return (
-      <div className="text-center py-12 text-sm text-muted-foreground">
-        No classrooms found.
-      </div>
+      <div className="text-center py-12 text-sm text-muted-foreground">No classrooms found.</div>
     );
   }
 
@@ -117,15 +113,11 @@ export function LibraryTable() {
           <thead>
             <tr className="border-b bg-muted/50">
               <th className="px-4 py-3 text-left font-medium text-muted-foreground">Title</th>
-              <th className="px-4 py-3 text-left font-medium text-muted-foreground">
-                Created By
-              </th>
+              <th className="px-4 py-3 text-left font-medium text-muted-foreground">Created By</th>
               <th className="px-4 py-3 text-left font-medium text-muted-foreground">
                 Created Date
               </th>
-              <th className="px-4 py-3 text-left font-medium text-muted-foreground">
-                Published
-              </th>
+              <th className="px-4 py-3 text-left font-medium text-muted-foreground">Published</th>
             </tr>
           </thead>
           <tbody>

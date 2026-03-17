@@ -23,12 +23,12 @@ export default function AdminDashboardPage() {
 
         if (usersRes.ok) {
           const users = await usersRes.json();
-          setUserCount(Array.isArray(users) ? users.length : null);
+          setUserCount(Array.isArray(users?.users) ? users.users.length : null);
         }
 
         if (libraryRes.ok) {
           const library = await libraryRes.json();
-          setClassroomCount(Array.isArray(library) ? library.length : null);
+          setClassroomCount(Array.isArray(library?.classrooms) ? library.classrooms.length : null);
         }
       } catch {
         // Stats remain null on error
@@ -45,9 +45,7 @@ export default function AdminDashboardPage() {
       {/* Page header */}
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">Dashboard</h1>
-        <p className="text-sm text-muted-foreground mt-1">
-          Overview of your OpenMAIC platform.
-        </p>
+        <p className="text-sm text-muted-foreground mt-1">Overview of your OpenMAIC platform.</p>
       </div>
 
       {/* Stats */}

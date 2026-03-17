@@ -37,7 +37,7 @@ export function UserTable() {
       const res = await fetch('/api/admin/users');
       if (!res.ok) throw new Error('Failed to load users');
       const data = await res.json();
-      setUsers(data);
+      setUsers(data.users ?? []);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error');
     } finally {
@@ -128,9 +128,7 @@ export function UserTable() {
               {inviteMessage}
             </p>
           )}
-          {inviteStatus === 'error' && (
-            <p className="text-sm text-destructive">{inviteMessage}</p>
-          )}
+          {inviteStatus === 'error' && <p className="text-sm text-destructive">{inviteMessage}</p>}
         </div>
       )}
 
@@ -156,10 +154,7 @@ export function UserTable() {
             </thead>
             <tbody>
               {users.map((user, i) => (
-                <tr
-                  key={user.id}
-                  className={i % 2 === 0 ? 'bg-background' : 'bg-muted/20'}
-                >
+                <tr key={user.id} className={i % 2 === 0 ? 'bg-background' : 'bg-muted/20'}>
                   <td className="px-4 py-3 font-medium">{user.email}</td>
                   <td className="px-4 py-3 text-muted-foreground">{user.full_name ?? '—'}</td>
                   <td className="px-4 py-3">

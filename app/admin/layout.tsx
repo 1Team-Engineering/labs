@@ -1,7 +1,20 @@
+'use client';
+
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { LayoutDashboard, Users, Library, ArrowLeft } from 'lucide-react';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+
+  function navClass(href: string) {
+    const isActive = pathname === href;
+    return (
+      'flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors' +
+      (isActive ? ' bg-muted font-medium' : '')
+    );
+  }
+
   return (
     <div className="flex h-screen bg-background">
       {/* Sidebar */}
@@ -13,24 +26,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
         {/* Nav links */}
         <nav className="flex-1 p-3 space-y-1">
-          <Link
-            href="/admin"
-            className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors"
-          >
+          <Link href="/admin" className={navClass('/admin')}>
             <LayoutDashboard className="h-4 w-4 shrink-0 text-muted-foreground" />
             <span>Dashboard</span>
           </Link>
-          <Link
-            href="/admin/users"
-            className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors"
-          >
+          <Link href="/admin/users" className={navClass('/admin/users')}>
             <Users className="h-4 w-4 shrink-0 text-muted-foreground" />
             <span>Users</span>
           </Link>
-          <Link
-            href="/admin/library"
-            className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors"
-          >
+          <Link href="/admin/library" className={navClass('/admin/library')}>
             <Library className="h-4 w-4 shrink-0 text-muted-foreground" />
             <span>Library</span>
           </Link>
