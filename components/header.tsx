@@ -88,13 +88,15 @@ export function Header({ currentSceneTitle }: HeaderProps) {
             onClick={() => router.push('/')}
             className="shrink-0 flex items-center gap-2 rounded-full bg-white/90 dark:bg-zinc-100/90 px-3 py-1 hover:bg-white dark:hover:bg-zinc-100 transition-colors"
             title={t('generation.backToHome')}
+            aria-label={t('generation.backToHome')}
           >
             <ArrowLeft className="w-3.5 h-3.5 text-zinc-500" />
             <Image
               src="/logo/1team-logo.png"
-              alt="1Team Labs"
-              width={64}
-              height={18}
+              alt=""
+              aria-hidden="true"
+              width={500}
+              height={500}
               className="h-[16px] w-auto"
             />
           </button>
