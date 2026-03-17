@@ -149,13 +149,13 @@ export default function ClassroomDetailPage() {
       <MediaStageProvider value={classroomId}>
         <div className="h-screen flex flex-col overflow-hidden">
           {loading ? (
-            <div className="flex-1 flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+            <div className="flex-1 flex items-center justify-center bg-zinc-50 dark:bg-zinc-950">
               <div className="text-center text-muted-foreground">
                 <p>Loading classroom...</p>
               </div>
             </div>
           ) : error ? (
-            <div className="flex-1 flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+            <div className="flex-1 flex items-center justify-center bg-zinc-50 dark:bg-zinc-950">
               <div className="text-center">
                 <p className="text-destructive mb-4">Error: {error}</p>
                 <button
@@ -164,7 +164,7 @@ export default function ClassroomDetailPage() {
                     setLoading(true);
                     loadClassroom();
                   }}
-                  className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90"
+                  className="rounded-full border border-zinc-900 bg-zinc-900 text-white px-6 py-2 text-sm font-semibold transition-all hover:bg-zinc-700 dark:border-zinc-100 dark:bg-zinc-100 dark:text-zinc-950 dark:hover:bg-zinc-300"
                 >
                   Retry
                 </button>
