@@ -11,6 +11,7 @@ import {
   Globe,
   AlertCircle,
   RefreshCw,
+  Check,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ThumbnailSlide } from '@/components/slide-renderer/components/ThumbnailSlide';
@@ -24,6 +25,7 @@ interface SceneSidebarProps {
   readonly onCollapseChange: (collapsed: boolean) => void;
   readonly onSceneSelect?: (sceneId: string) => void;
   readonly onRetryOutline?: (outlineId: string) => Promise<void>;
+  readonly isSceneViewed?: (sceneId: string) => boolean;
 }
 
 const DEFAULT_WIDTH = 220;
@@ -35,6 +37,7 @@ export function SceneSidebar({
   onCollapseChange,
   onSceneSelect,
   onRetryOutline,
+  isSceneViewed,
 }: SceneSidebarProps) {
   const { t } = useI18n();
   const router = useRouter();
@@ -163,7 +166,7 @@ export function SceneSidebar({
               >
                 {/* Scene Header */}
                 <div className="flex justify-between items-center px-2 pt-0.5">
-                  <div className="flex items-center gap-2 max-w-full">
+                  <div className="flex items-center gap-2 min-w-0 flex-1">
                     <span
                       className={cn(
                         'text-[10px] font-black w-4 h-4 rounded-full flex items-center justify-center shrink-0',
@@ -176,7 +179,7 @@ export function SceneSidebar({
                     </span>
                     <span
                       className={cn(
-                        'text-xs font-bold truncate transition-colors',
+                        'text-xs font-bold truncate transition-colors flex-1',
                         isActive
                           ? 'text-purple-700 dark:text-purple-300'
                           : 'text-gray-600 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-gray-100',
@@ -185,6 +188,15 @@ export function SceneSidebar({
                       {scene.title}
                     </span>
                   </div>
+                  {isSceneViewed && (
+                    <span className="shrink-0 ml-1">
+                      {isSceneViewed(scene.id) ? (
+                        <Check className="w-3 h-3 text-zinc-500 dark:text-zinc-400" />
+                      ) : (
+                        <span className="block w-2.5 h-2.5 rounded-full border border-zinc-300 dark:border-zinc-600" />
+                      )}
+                    </span>
+                  )}
                 </div>
 
                 {/* Thumbnail */}

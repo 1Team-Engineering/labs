@@ -29,6 +29,8 @@ import {
 } from '@/components/ui/alert-dialog';
 import { AlertTriangle } from 'lucide-react';
 import { VisuallyHidden } from 'radix-ui';
+import { useParams } from 'next/navigation';
+import { useSceneProgress } from '@/lib/hooks/use-scene-progress';
 
 /**
  * Stage Component
@@ -43,9 +45,16 @@ export function Stage({
   onRetryOutline?: (outlineId: string) => Promise<void>;
 }) {
   const { t } = useI18n();
+  const params = useParams();
+  const classroomId = (params?.id as string) ?? '';
   const { mode, getCurrentScene, scenes, currentSceneId, setCurrentSceneId, generatingOutlines } =
     useStageStore();
   const failedOutlines = useStageStore.use.failedOutlines();
+
+  const { markViewed, isViewed, viewedCount, totalCount } = useSceneProgress({
+    classroomId,
+    totalScenes: scenes.length,
+  });
 
   const currentScene = getCurrentScene();
 
@@ -436,6 +445,13 @@ export function Stage({
     };
   }, []);
 
+  // Mark current scene as viewed for progress tracking
+  useEffect(() => {
+    if (currentSceneId && currentSceneId !== PENDING_SCENE_ID) {
+      markViewed(currentSceneId);
+    }
+  }, [currentSceneId, markViewed]);
+
   // Sync mute state from settings store to audioPlayer
   const ttsMuted = useSettingsStore((s) => s.ttsMuted);
   useEffect(() => {
@@ -680,12 +696,17 @@ export function Stage({
         onCollapseChange={setSidebarCollapsed}
         onSceneSelect={gatedSceneSwitch}
         onRetryOutline={onRetryOutline}
+        isSceneViewed={isViewed}
       />
 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col overflow-hidden min-w-0 relative">
         {/* Header */}
-        <Header currentSceneTitle={currentScene?.title || ''} />
+        <Header
+          currentSceneTitle={currentScene?.title || ''}
+          viewedCount={viewedCount}
+          totalCount={totalCount}
+        />
 
         {/* Canvas Area */}
         <div
