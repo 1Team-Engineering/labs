@@ -51,7 +51,7 @@ export function Stage({
     useStageStore();
   const failedOutlines = useStageStore.use.failedOutlines();
 
-  const { markViewed, isViewed, viewedCount, totalCount } = useSceneProgress({
+  const { markViewed, isViewed, viewedCount, totalCount, progressPercent } = useSceneProgress({
     classroomId,
     totalScenes: scenes.length,
   });
@@ -706,6 +706,7 @@ export function Stage({
           currentSceneTitle={currentScene?.title || ''}
           viewedCount={viewedCount}
           totalCount={totalCount}
+          progressPercent={progressPercent}
         />
 
         {/* Canvas Area */}

@@ -27,9 +27,15 @@ interface HeaderProps {
   readonly currentSceneTitle: string;
   readonly viewedCount?: number;
   readonly totalCount?: number;
+  readonly progressPercent?: number;
 }
 
-export function Header({ currentSceneTitle, viewedCount = 0, totalCount = 0 }: HeaderProps) {
+export function Header({
+  currentSceneTitle,
+  viewedCount = 0,
+  totalCount = 0,
+  progressPercent = 0,
+}: HeaderProps) {
   const { t, locale, setLocale } = useI18n();
   const { theme, setTheme } = useTheme();
   const router = useRouter();
@@ -114,10 +120,17 @@ export function Header({ currentSceneTitle, viewedCount = 0, totalCount = 0 }: H
             </h1>
             {totalCount > 0 && (
               <div className="flex items-center gap-2 mt-1">
-                <div className="h-1 w-24 bg-zinc-200 dark:bg-zinc-700 rounded-full overflow-hidden">
+                <div
+                  role="progressbar"
+                  aria-valuenow={viewedCount}
+                  aria-valuemin={0}
+                  aria-valuemax={totalCount}
+                  aria-label={t('stage.sceneProgress')}
+                  className="h-1 w-24 bg-zinc-200 dark:bg-zinc-700 rounded-full overflow-hidden"
+                >
                   <div
                     className="h-full bg-zinc-500 dark:bg-zinc-400 rounded-full transition-all duration-500"
-                    style={{ width: `${Math.round((viewedCount / totalCount) * 100)}%` }}
+                    style={{ width: `${progressPercent}%` }}
                   />
                 </div>
                 <span className="text-[10px] text-zinc-400 dark:text-zinc-500 tabular-nums">
