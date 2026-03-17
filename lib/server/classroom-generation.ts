@@ -26,6 +26,7 @@ export interface GenerateClassroomInput {
   requirement: string;
   pdfContent?: { text: string; images: string[] };
   language?: string;
+  userId?: string;
 }
 
 export type ClassroomGenerationStep =
@@ -90,7 +91,7 @@ export async function generateClassroom(
     onProgress?: (progress: ClassroomGenerationProgress) => Promise<void> | void;
   },
 ): Promise<GenerateClassroomResult> {
-  const { requirement, pdfContent } = input;
+  const { requirement, pdfContent, userId } = input;
 
   await options.onProgress?.({
     step: 'initializing',
@@ -239,6 +240,7 @@ export async function generateClassroom(
       id: stageId,
       stage,
       scenes,
+      userId,
     },
     options.baseUrl,
   );
