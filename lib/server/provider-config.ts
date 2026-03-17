@@ -9,6 +9,7 @@ import fs from 'fs';
 import path from 'path';
 import yaml from 'js-yaml';
 import { createLogger } from '@/lib/logger';
+import { getOrgSettings } from '@/lib/org-settings';
 
 const log = createLogger('ServerProviderConfig');
 
@@ -387,4 +388,81 @@ export function resolveWebSearchApiKey(_clientKey?: string): string {
   const serverKey = getConfig().webSearch.tavily?.apiKey;
   if (serverKey) return serverKey;
   return process.env.TAVILY_API_KEY || '';
+}
+
+// ---------------------------------------------------------------------------
+// Async resolve functions — check server config first, then fall back to
+// org_settings stored in Supabase (set by admin via the settings UI).
+// ---------------------------------------------------------------------------
+
+type ProviderCfg = Record<string, { apiKey?: string; baseUrl?: string }>;
+
+// ── LLM providers ────────────────────────────────────────────────────────────
+export async function resolveApiKeyAsync(providerId: string): Promise<string> {
+  const serverKey = getConfig().providers[providerId]?.apiKey;
+  if (serverKey) return serverKey;
+  const org = await getOrgSettings<ProviderCfg>('providers');
+  return org?.[providerId]?.apiKey ?? '';
+}
+
+export async function resolveBaseUrlAsync(providerId: string): Promise<string | undefined> {
+  const serverUrl = getConfig().providers[providerId]?.baseUrl;
+  if (serverUrl) return serverUrl;
+  const org = await getOrgSettings<ProviderCfg>('providers');
+  return org?.[providerId]?.baseUrl;
+}
+
+// ── TTS ───────────────────────────────────────────────────────────────────────
+export async function resolveTTSApiKeyAsync(providerId: string): Promise<string> {
+  const serverKey = getConfig().tts[providerId]?.apiKey;
+  if (serverKey) return serverKey;
+  const org = await getOrgSettings<ProviderCfg>('tts');
+  return org?.[providerId]?.apiKey ?? '';
+}
+
+export async function resolveTTSBaseUrlAsync(providerId: string): Promise<string | undefined> {
+  const serverUrl = getConfig().tts[providerId]?.baseUrl;
+  if (serverUrl) return serverUrl;
+  const org = await getOrgSettings<ProviderCfg>('tts');
+  return org?.[providerId]?.baseUrl;
+}
+
+// ── ASR ───────────────────────────────────────────────────────────────────────
+export async function resolveASRApiKeyAsync(providerId: string): Promise<string> {
+  const serverKey = getConfig().asr[providerId]?.apiKey;
+  if (serverKey) return serverKey;
+  const org = await getOrgSettings<ProviderCfg>('asr');
+  return org?.[providerId]?.apiKey ?? '';
+}
+
+// ── PDF ───────────────────────────────────────────────────────────────────────
+export async function resolvePDFApiKeyAsync(providerId: string): Promise<string> {
+  const serverKey = getConfig().pdf[providerId]?.apiKey;
+  if (serverKey) return serverKey;
+  const org = await getOrgSettings<ProviderCfg>('pdf');
+  return org?.[providerId]?.apiKey ?? '';
+}
+
+// ── Image generation ──────────────────────────────────────────────────────────
+export async function resolveImageApiKeyAsync(providerId: string): Promise<string> {
+  const serverKey = getConfig().image[providerId]?.apiKey;
+  if (serverKey) return serverKey;
+  const org = await getOrgSettings<ProviderCfg>('image');
+  return org?.[providerId]?.apiKey ?? '';
+}
+
+// ── Video generation ──────────────────────────────────────────────────────────
+export async function resolveVideoApiKeyAsync(providerId: string): Promise<string> {
+  const serverKey = getConfig().video[providerId]?.apiKey;
+  if (serverKey) return serverKey;
+  const org = await getOrgSettings<ProviderCfg>('video');
+  return org?.[providerId]?.apiKey ?? '';
+}
+
+// ── Web search ────────────────────────────────────────────────────────────────
+export async function resolveWebSearchApiKeyAsync(providerId: string): Promise<string> {
+  const serverKey = getConfig().webSearch[providerId]?.apiKey;
+  if (serverKey) return serverKey;
+  const org = await getOrgSettings<ProviderCfg>('web-search');
+  return org?.[providerId]?.apiKey ?? '';
 }

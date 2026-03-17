@@ -16,7 +16,7 @@
 
 import { NextRequest } from 'next/server';
 import { testImageConnectivity } from '@/lib/media/image-providers';
-import { resolveImageApiKey, resolveImageBaseUrl } from '@/lib/server/provider-config';
+import { resolveImageApiKeyAsync, resolveImageBaseUrl } from '@/lib/server/provider-config';
 import type { ImageProviderId } from '@/lib/media/types';
 import { apiError, apiSuccess } from '@/lib/server/api-response';
 import { createLogger } from '@/lib/logger';
@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
     const clientApiKey = request.headers.get('x-api-key') || undefined;
     const clientBaseUrl = request.headers.get('x-base-url') || undefined;
 
-    const apiKey = resolveImageApiKey(providerId, clientApiKey);
+    const apiKey = await resolveImageApiKeyAsync(providerId);
     const baseUrl = resolveImageBaseUrl(providerId, clientBaseUrl);
 
     if (!apiKey) {

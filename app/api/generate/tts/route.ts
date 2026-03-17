@@ -9,7 +9,7 @@
 
 import { NextRequest } from 'next/server';
 import { generateTTS } from '@/lib/audio/tts-providers';
-import { resolveTTSApiKey, resolveTTSBaseUrl } from '@/lib/server/provider-config';
+import { resolveTTSApiKeyAsync, resolveTTSBaseUrlAsync } from '@/lib/server/provider-config';
 import type { TTSProviderId } from '@/lib/audio/types';
 import { createLogger } from '@/lib/logger';
 import { apiError, apiSuccess } from '@/lib/server/api-response';
@@ -46,8 +46,8 @@ export async function POST(req: NextRequest) {
     }
 
     // Resolve API key and base URL (server-side fallback)
-    const apiKey = resolveTTSApiKey(ttsProviderId, ttsApiKey || undefined);
-    const baseUrl = resolveTTSBaseUrl(ttsProviderId, ttsBaseUrl || undefined);
+    const apiKey = await resolveTTSApiKeyAsync(ttsProviderId);
+    const baseUrl = await resolveTTSBaseUrlAsync(ttsProviderId);
 
     // Build TTS config
     const config = {

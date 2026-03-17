@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 import { transcribeAudio } from '@/lib/audio/asr-providers';
-import { resolveASRApiKey, resolveASRBaseUrl } from '@/lib/server/provider-config';
+import { resolveASRApiKeyAsync, resolveASRBaseUrl } from '@/lib/server/provider-config';
 import type { ASRProviderId } from '@/lib/audio/types';
 import { createLogger } from '@/lib/logger';
 import { apiError, apiSuccess } from '@/lib/server/api-response';
@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
     const config = {
       providerId: effectiveProviderId,
       language: language || 'auto',
-      apiKey: resolveASRApiKey(effectiveProviderId, apiKey || undefined),
+      apiKey: await resolveASRApiKeyAsync(effectiveProviderId),
       baseUrl: resolveASRBaseUrl(effectiveProviderId, baseUrl || undefined),
     };
 

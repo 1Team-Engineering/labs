@@ -18,7 +18,7 @@
 
 import { NextRequest } from 'next/server';
 import { generateVideo, normalizeVideoOptions } from '@/lib/media/video-providers';
-import { resolveVideoApiKey, resolveVideoBaseUrl } from '@/lib/server/provider-config';
+import { resolveVideoApiKeyAsync, resolveVideoBaseUrl } from '@/lib/server/provider-config';
 import type { VideoProviderId, VideoGenerationOptions } from '@/lib/media/types';
 import { createLogger } from '@/lib/logger';
 import { apiError, apiSuccess } from '@/lib/server/api-response';
@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
     const clientBaseUrl = request.headers.get('x-base-url') || undefined;
     const clientModel = request.headers.get('x-video-model') || undefined;
 
-    const apiKey = resolveVideoApiKey(providerId, clientApiKey);
+    const apiKey = await resolveVideoApiKeyAsync(providerId);
     if (!apiKey) {
       return apiError(
         'MISSING_API_KEY',

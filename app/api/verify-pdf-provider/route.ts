@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server';
 import { createLogger } from '@/lib/logger';
 import { apiError, apiSuccess } from '@/lib/server/api-response';
-import { resolvePDFApiKey, resolvePDFBaseUrl } from '@/lib/server/provider-config';
+import { resolvePDFApiKeyAsync, resolvePDFBaseUrl } from '@/lib/server/provider-config';
 
 const log = createLogger('Verify PDF Provider');
 
@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
       return apiError('MISSING_REQUIRED_FIELD', 400, 'Base URL is required');
     }
 
-    const resolvedApiKey = resolvePDFApiKey(providerId, apiKey);
+    const resolvedApiKey = await resolvePDFApiKeyAsync(providerId);
 
     const headers: Record<string, string> = {};
     if (resolvedApiKey) {
