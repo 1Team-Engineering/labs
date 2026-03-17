@@ -512,9 +512,7 @@ function HomePage() {
         )}
       >
         {/* ── Logo ── */}
-        <motion.img
-          src="/logo-horizontal.png"
-          alt="OpenMAIC"
+        <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{
@@ -523,8 +521,17 @@ function HomePage() {
             stiffness: 200,
             damping: 20,
           }}
-          className="h-12 md:h-16 mb-2 -ml-2 md:-ml-3"
-        />
+          className="relative mb-2"
+        >
+          <div className="absolute inset-0 blur-3xl bg-zinc-900/30 dark:bg-zinc-100/30 scale-110" />
+          <Image
+            src="/logo/1team-logo.png"
+            alt="1Team Technologies"
+            width={560}
+            height={160}
+            className="relative h-40 w-auto drop-shadow-[0_10px_40px_rgba(0,0,0,0.25)] dark:drop-shadow-[0_10px_40px_rgba(255,255,255,0.2)]"
+          />
+        </motion.div>
 
         {/* ── Slogan ── */}
         <motion.p

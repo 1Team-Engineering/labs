@@ -1,13 +1,13 @@
 'use client';
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import {
   getViewedScenes,
   markSceneViewed,
 } from '@/lib/utils/scene-progress';
 
 interface UseSceneProgressOptions {
-  classroomId: string;
+  classroomId: string | null;
   totalScenes: number;
 }
 
@@ -24,20 +24,27 @@ export function useSceneProgress({
   totalScenes,
 }: UseSceneProgressOptions): UseSceneProgressResult {
   const [viewedIds, setViewedIds] = useState<Set<string>>(new Set());
+  const viewedIdsRef = useRef(viewedIds);
+
+  // Keep ref in sync with state so markViewed always reads the latest set
+  // without needing viewedIds in its dependency array
+  useEffect(() => {
+    viewedIdsRef.current = viewedIds;
+  }, [viewedIds]);
 
   // Load from localStorage on mount / classroomId change
   useEffect(() => {
+    if (!classroomId) return;
     setViewedIds(getViewedScenes(classroomId));
   }, [classroomId]);
 
   const markViewed = useCallback(
     (sceneId: string) => {
-      markSceneViewed(classroomId, sceneId);
-      setViewedIds((prev) => {
-        const next = new Set(prev);
-        next.add(sceneId);
-        return next;
-      });
+      if (!classroomId) return;
+      const next = new Set(viewedIdsRef.current);
+      next.add(sceneId);
+      markSceneViewed(classroomId, sceneId, next);
+      setViewedIds(next);
     },
     [classroomId]
   );

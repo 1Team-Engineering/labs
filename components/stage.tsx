@@ -46,12 +46,12 @@ export function Stage({
 }) {
   const { t } = useI18n();
   const params = useParams();
-  const classroomId = (params?.id as string) ?? '';
+  const classroomId = (params?.id as string) || null;
   const { mode, getCurrentScene, scenes, currentSceneId, setCurrentSceneId, generatingOutlines } =
     useStageStore();
   const failedOutlines = useStageStore.use.failedOutlines();
 
-  const { markViewed, isViewed, viewedCount, totalCount } = useSceneProgress({
+  const { markViewed, isViewed, viewedCount, totalCount, progressPercent } = useSceneProgress({
     classroomId,
     totalScenes: scenes.length,
   });
@@ -706,6 +706,7 @@ export function Stage({
           currentSceneTitle={currentScene?.title || ''}
           viewedCount={viewedCount}
           totalCount={totalCount}
+          progressPercent={progressPercent}
         />
 
         {/* Canvas Area */}

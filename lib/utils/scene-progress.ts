@@ -1,6 +1,7 @@
 const STORAGE_KEY_PREFIX = '1t-scene-progress-';
 
 function storageKey(classroomId: string): string {
+  if (!classroomId) throw new Error('classroomId must not be empty');
   return `${STORAGE_KEY_PREFIX}${classroomId}`;
 }
 
@@ -14,9 +15,13 @@ export function getViewedScenes(classroomId: string): Set<string> {
   }
 }
 
-export function markSceneViewed(classroomId: string, sceneId: string): void {
+export function markSceneViewed(
+  classroomId: string,
+  sceneId: string,
+  current?: Set<string>,
+): void {
   try {
-    const viewed = getViewedScenes(classroomId);
+    const viewed = current ? new Set(current) : getViewedScenes(classroomId);
     viewed.add(sceneId);
     localStorage.setItem(storageKey(classroomId), JSON.stringify([...viewed]));
   } catch {
