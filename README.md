@@ -1,5 +1,5 @@
 <!-- <p align="center">
-  <img src="assets/logo-horizontal.png" alt="OpenMAIC" width="420"/>
+  <img src="assets/1team-logo.png" alt="1Team Technologies" width="420"/>
 </p> -->
 
 <p align="center">

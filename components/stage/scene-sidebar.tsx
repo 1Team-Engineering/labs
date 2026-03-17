@@ -2,6 +2,7 @@
 
 import { useState, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import {
   PanelLeftClose,
   PieChart,
@@ -129,7 +130,13 @@ export function SceneSidebar({
             className="flex items-center gap-2 cursor-pointer rounded-lg px-1.5 -mx-1.5 py-1 -my-1 hover:bg-gray-100/80 dark:hover:bg-gray-800/60 active:scale-[0.97] transition-all duration-150"
             title={t('generation.backToHome')}
           >
-            <img src="/logo-horizontal.png" alt="OpenMAIC" className="h-6" />
+            <Image
+              src="/logo/1team-logo.png"
+              alt="1Team Technologies"
+              width={560}
+              height={160}
+              className="h-6 w-auto"
+            />
           </button>
           <button
             onClick={() => onCollapseChange(true)}
