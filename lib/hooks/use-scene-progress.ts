@@ -7,7 +7,7 @@ import {
 } from '@/lib/utils/scene-progress';
 
 interface UseSceneProgressOptions {
-  classroomId: string;
+  classroomId: string | null;
   totalScenes: number;
 }
 
@@ -27,19 +27,19 @@ export function useSceneProgress({
 
   // Load from localStorage on mount / classroomId change
   useEffect(() => {
+    if (!classroomId) return;
     setViewedIds(getViewedScenes(classroomId));
   }, [classroomId]);
 
   const markViewed = useCallback(
     (sceneId: string) => {
-      markSceneViewed(classroomId, sceneId);
-      setViewedIds((prev) => {
-        const next = new Set(prev);
-        next.add(sceneId);
-        return next;
-      });
+      if (!classroomId) return;
+      const next = new Set(viewedIds);
+      next.add(sceneId);
+      markSceneViewed(classroomId, sceneId, next);
+      setViewedIds(next);
     },
-    [classroomId]
+    [classroomId, viewedIds]
   );
 
   const isViewed = useCallback(

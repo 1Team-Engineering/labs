@@ -46,7 +46,7 @@ export function Stage({
 }) {
   const { t } = useI18n();
   const params = useParams();
-  const classroomId = (params?.id as string) ?? '';
+  const classroomId = (params?.id as string) || null;
   const { mode, getCurrentScene, scenes, currentSceneId, setCurrentSceneId, generatingOutlines } =
     useStageStore();
   const failedOutlines = useStageStore.use.failedOutlines();
