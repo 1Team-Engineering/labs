@@ -47,6 +47,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { useDraftCache } from '@/lib/hooks/use-draft-cache';
 import { SpeechButton } from '@/components/audio/speech-button';
 import Image from 'next/image';
+import { LibrarySection } from '@/components/home/library-section';
 
 const log = createLogger('Home');
 
@@ -732,6 +733,11 @@ function HomePage() {
           </AnimatePresence>
         </motion.div>
       )}
+
+      {/* ═══ Library Section ═══ */}
+      <div className="w-full max-w-7xl px-4 mx-auto">
+        <LibrarySection />
+      </div>
 
       {/* ═══ 1Team Footer ═══ */}
       <footer className="mt-auto w-full pt-12 pb-6 border-t border-zinc-200/60 dark:border-zinc-800/60">
