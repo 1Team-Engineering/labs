@@ -346,7 +346,7 @@ function HomePage() {
       {/* ═══ Top-right pill (unchanged) ═══ */}
       <div
         ref={toolbarRef}
-        className="fixed top-4 right-4 z-50 flex items-center gap-1 bg-white/60 dark:bg-gray-800/60 backdrop-blur-md px-2 py-1.5 rounded-full border border-gray-100/50 dark:border-gray-700/50 shadow-sm"
+        className="fixed top-4 right-4 z-50 flex items-center gap-1 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md px-2 py-1.5 rounded-full border border-zinc-200/60 dark:border-zinc-700/60 shadow-sm"
       >
         {/* Language Selector */}
         <div className="relative">
@@ -355,21 +355,21 @@ function HomePage() {
               setLanguageOpen(!languageOpen);
               setThemeOpen(false);
             }}
-            className="flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-bold text-gray-500 dark:text-gray-400 hover:bg-white dark:hover:bg-gray-700 hover:text-gray-800 dark:hover:text-gray-200 hover:shadow-sm transition-all"
+            className="flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-bold text-zinc-500 dark:text-zinc-400 hover:bg-white dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-zinc-100 hover:shadow-sm transition-all"
           >
             {locale === 'zh-CN' ? 'CN' : 'EN'}
           </button>
           {languageOpen && (
-            <div className="absolute top-full mt-2 right-0 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg overflow-hidden z-50 min-w-[120px]">
+            <div className="absolute top-full mt-2 right-0 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-lg shadow-lg overflow-hidden z-50 min-w-[120px]">
               <button
                 onClick={() => {
                   setLocale('zh-CN');
                   setLanguageOpen(false);
                 }}
                 className={cn(
-                  'w-full px-4 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors',
+                  'w-full px-4 py-2 text-left text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors',
                   locale === 'zh-CN' &&
-                    'bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400',
+                    'bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 font-semibold',
                 )}
               >
                 简体中文
@@ -380,9 +380,9 @@ function HomePage() {
                   setLanguageOpen(false);
                 }}
                 className={cn(
-                  'w-full px-4 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors',
+                  'w-full px-4 py-2 text-left text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors',
                   locale === 'en-US' &&
-                    'bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400',
+                    'bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 font-semibold',
                 )}
               >
                 English
@@ -391,7 +391,7 @@ function HomePage() {
           )}
         </div>
 
-        <div className="w-[1px] h-4 bg-gray-200 dark:bg-gray-700" />
+        <div className="w-[1px] h-4 bg-zinc-200 dark:bg-zinc-700" />
 
         {/* Theme Selector */}
         <div className="relative">
@@ -400,23 +400,23 @@ function HomePage() {
               setThemeOpen(!themeOpen);
               setLanguageOpen(false);
             }}
-            className="p-2 rounded-full text-gray-400 dark:text-gray-500 hover:bg-white dark:hover:bg-gray-700 hover:text-gray-800 dark:hover:text-gray-200 hover:shadow-sm transition-all"
+            className="p-2 rounded-full text-zinc-400 dark:text-zinc-500 hover:bg-white dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-zinc-100 hover:shadow-sm transition-all"
           >
             {theme === 'light' && <Sun className="w-4 h-4" />}
             {theme === 'dark' && <Moon className="w-4 h-4" />}
             {theme === 'system' && <Monitor className="w-4 h-4" />}
           </button>
           {themeOpen && (
-            <div className="absolute top-full mt-2 right-0 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg overflow-hidden z-50 min-w-[140px]">
+            <div className="absolute top-full mt-2 right-0 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-lg shadow-lg overflow-hidden z-50 min-w-[140px]">
               <button
                 onClick={() => {
                   setTheme('light');
                   setThemeOpen(false);
                 }}
                 className={cn(
-                  'w-full px-4 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex items-center gap-2',
+                  'w-full px-4 py-2 text-left text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors flex items-center gap-2',
                   theme === 'light' &&
-                    'bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400',
+                    'bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 font-semibold',
                 )}
               >
                 <Sun className="w-4 h-4" />
@@ -428,9 +428,9 @@ function HomePage() {
                   setThemeOpen(false);
                 }}
                 className={cn(
-                  'w-full px-4 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex items-center gap-2',
+                  'w-full px-4 py-2 text-left text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors flex items-center gap-2',
                   theme === 'dark' &&
-                    'bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400',
+                    'bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 font-semibold',
                 )}
               >
                 <Moon className="w-4 h-4" />
@@ -442,9 +442,9 @@ function HomePage() {
                   setThemeOpen(false);
                 }}
                 className={cn(
-                  'w-full px-4 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex items-center gap-2',
+                  'w-full px-4 py-2 text-left text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors flex items-center gap-2',
                   theme === 'system' &&
-                    'bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400',
+                    'bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 font-semibold',
                 )}
               >
                 <Monitor className="w-4 h-4" />
@@ -454,14 +454,14 @@ function HomePage() {
           )}
         </div>
 
-        <div className="w-[1px] h-4 bg-gray-200 dark:bg-gray-700" />
+        <div className="w-[1px] h-4 bg-zinc-200 dark:bg-zinc-700" />
 
         {/* Settings Button */}
         <div className="relative">
           <button
             onClick={() => setSettingsOpen(true)}
             className={cn(
-              'p-2 rounded-full text-gray-400 dark:text-gray-500 hover:bg-white dark:hover:bg-gray-700 hover:text-gray-800 dark:hover:text-gray-200 hover:shadow-sm transition-all group',
+              'p-2 rounded-full text-zinc-400 dark:text-zinc-500 hover:bg-white dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-zinc-100 hover:shadow-sm transition-all group',
               needsSetup && 'animate-setup-glow',
             )}
           >
@@ -470,10 +470,10 @@ function HomePage() {
           {needsSetup && (
             <>
               <span className="absolute -top-0.5 -right-0.5 flex h-3 w-3">
-                <span className="animate-setup-ping absolute inline-flex h-full w-full rounded-full bg-violet-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-3 w-3 bg-violet-500" />
+                <span className="animate-setup-ping absolute inline-flex h-full w-full rounded-full bg-zinc-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-zinc-500" />
               </span>
-              <span className="animate-setup-float absolute top-full mt-2 right-0 whitespace-nowrap text-[11px] font-medium text-violet-600 dark:text-violet-400 bg-violet-50 dark:bg-violet-950/40 border border-violet-200 dark:border-violet-800/50 px-2 py-0.5 rounded-full shadow-sm pointer-events-none">
+              <span className="animate-setup-float absolute top-full mt-2 right-0 whitespace-nowrap text-[11px] font-medium text-zinc-700 dark:text-zinc-300 bg-zinc-100 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 px-2 py-0.5 rounded-full shadow-sm pointer-events-none">
                 {t('settings.setupNeeded')}
               </span>
             </>
@@ -543,7 +543,7 @@ function HomePage() {
           transition={{ delay: 0.35 }}
           className="w-full"
         >
-          <div className="w-full rounded-2xl border border-border/60 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl shadow-xl shadow-black/[0.03] dark:shadow-black/20 transition-shadow focus-within:shadow-2xl focus-within:shadow-violet-500/[0.06]">
+          <div className="w-full rounded-2xl border border-zinc-200/60 dark:border-zinc-700/60 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl shadow-xl shadow-black/[0.03] dark:shadow-black/20 transition-shadow focus-within:shadow-2xl focus-within:shadow-zinc-400/[0.08] dark:focus-within:shadow-zinc-700/[0.12]">
             {/* ── Greeting + Profile + Agents ── */}
             <div className="relative z-20 flex items-start justify-between">
               <GreetingBar />
@@ -600,8 +600,8 @@ function HomePage() {
                 className={cn(
                   'shrink-0 h-8 rounded-lg flex items-center justify-center gap-1.5 transition-all px-3',
                   canGenerate
-                    ? 'bg-primary text-primary-foreground hover:opacity-90 shadow-sm cursor-pointer'
-                    : 'bg-muted text-muted-foreground/40 cursor-not-allowed',
+                    ? 'bg-zinc-900 text-white hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-950 dark:hover:bg-zinc-200 shadow-sm cursor-pointer'
+                    : 'bg-zinc-100 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-600 cursor-not-allowed',
                 )}
               >
                 <span className="text-xs font-medium">{t('toolbar.enterClassroom')}</span>
@@ -1072,7 +1072,7 @@ function ClassroomCard({
       {/* Thumbnail — large radius, no border, subtle bg */}
       <div
         ref={thumbRef}
-        className="relative w-full aspect-[16/9] rounded-2xl bg-slate-100 dark:bg-slate-800/80 overflow-hidden transition-transform duration-200 group-hover:scale-[1.02]"
+        className="relative w-full aspect-[16/9] rounded-2xl bg-zinc-100 dark:bg-zinc-800/80 overflow-hidden transition-transform duration-200 group-hover:scale-[1.02]"
       >
         {slide && thumbWidth > 0 ? (
           <ThumbnailSlide
@@ -1148,7 +1148,7 @@ function ClassroomCard({
 
       {/* Info — outside the thumbnail */}
       <div className="mt-2.5 px-1 flex items-center gap-2">
-        <span className="shrink-0 inline-flex items-center rounded-full bg-violet-100 dark:bg-violet-900/30 px-2 py-0.5 text-[11px] font-medium text-violet-600 dark:text-violet-400">
+        <span className="shrink-0 inline-flex items-center rounded-full bg-zinc-100 dark:bg-zinc-800 px-2 py-0.5 text-[11px] font-medium text-zinc-600 dark:text-zinc-400">
           {classroom.sceneCount} {t('classroom.slides')} · {formatDate(classroom.updatedAt)}
         </span>
         <Tooltip>
