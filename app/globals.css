@@ -1,6 +1,9 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
+/* 1Team design system tokens */
+@import '../ui/tokens/colors.css';
+@import '../ui/tokens/typography.css';
 
 @custom-variant dark (&:is(.dark *));
 

@@ -1,0 +1,35 @@
+/**
+ * 1Team Design System — Typography Tokens
+ * Extracted from 1team.io for use in labs.1team.io
+ */
+
+:root {
+  /* Font families */
+  --1t-font-sans: Inter, Arial, Helvetica, sans-serif;
+
+  /* Type scale */
+  --1t-text-xs: 0.75rem;      /* 12px */
+  --1t-text-sm: 0.875rem;     /* 14px */
+  --1t-text-base: 1rem;       /* 16px */
+  --1t-text-lg: 1.125rem;     /* 18px */
+  --1t-text-xl: 1.25rem;      /* 20px */
+  --1t-text-2xl: 1.5rem;      /* 24px */
+  --1t-text-3xl: 1.875rem;    /* 30px */
+  --1t-text-5xl: 3rem;        /* 48px */
+  --1t-text-7xl: 4.5rem;      /* 72px */
+
+  /* Font weights */
+  --1t-font-normal: 400;
+  --1t-font-medium: 500;
+  --1t-font-semibold: 600;
+  --1t-font-bold: 700;
+
+  /* Letter spacing */
+  --1t-tracking-tight: -0.025em;
+  --1t-tracking-eyebrow: 0.3em;
+  --1t-tracking-normal: 0;
+
+  /* Line heights */
+  --1t-leading-tight: 1.25;
+  --1t-leading-normal: 1.5;
+}

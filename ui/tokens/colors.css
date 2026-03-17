@@ -1,0 +1,70 @@
+/**
+ * 1Team Design System — Color Tokens
+ * Extracted from 1team.io for use in labs.1team.io
+ *
+ * These map the zinc Tailwind palette to semantic tokens.
+ * Import this file in globals.css to use alongside shadcn variables.
+ */
+
+:root {
+  /* === Surfaces === */
+  --1t-bg: theme(colors.zinc.50);           /* Page background */
+  --1t-bg-card: theme(colors.zinc.100);      /* Card surfaces */
+  --1t-bg-elevated: #ffffff;                 /* Elevated surfaces (modals, pills) */
+
+  /* === Text === */
+  --1t-text-heading: theme(colors.zinc.950); /* H1, H2 */
+  --1t-text-body: theme(colors.zinc.900);    /* Body text */
+  --1t-text-sub: theme(colors.zinc.600);     /* Descriptions */
+  --1t-text-muted: theme(colors.zinc.500);   /* Eyebrows, captions, footers */
+  --1t-text-nav: theme(colors.zinc.700);     /* Nav links */
+  --1t-text-nav-hover: theme(colors.zinc.950); /* Nav link hover */
+
+  /* === Borders === */
+  --1t-border: theme(colors.zinc.200);       /* Section dividers, card borders */
+  --1t-border-strong: theme(colors.zinc.300); /* Buttons, inputs */
+  --1t-border-nav: color-mix(in oklch, theme(colors.zinc.300) 70%, transparent);
+
+  /* === Interactive === */
+  --1t-btn-primary-bg: theme(colors.zinc.900);
+  --1t-btn-primary-text: #ffffff;
+  --1t-btn-primary-hover: theme(colors.zinc.700);
+  --1t-btn-ghost-border: theme(colors.zinc.400);
+  --1t-btn-ghost-text: theme(colors.zinc.900);
+  --1t-btn-ghost-hover-border: theme(colors.zinc.900);
+
+  /* === Navigation === */
+  --1t-nav-bg-scrolled: color-mix(in oklch, #ffffff 80%, transparent);
+  --1t-nav-backdrop: blur(24px);
+}
+
+.dark {
+  /* === Surfaces === */
+  --1t-bg: theme(colors.zinc.950);
+  --1t-bg-card: theme(colors.zinc.900);
+  --1t-bg-elevated: theme(colors.zinc.100);   /* Still light for logo pills */
+
+  /* === Text === */
+  --1t-text-heading: theme(colors.zinc.50);
+  --1t-text-body: theme(colors.zinc.100);
+  --1t-text-sub: theme(colors.zinc.300);
+  --1t-text-muted: theme(colors.zinc.400);
+  --1t-text-nav: theme(colors.zinc.300);
+  --1t-text-nav-hover: theme(colors.zinc.50);
+
+  /* === Borders === */
+  --1t-border: theme(colors.zinc.800);
+  --1t-border-strong: theme(colors.zinc.700);
+  --1t-border-nav: color-mix(in oklch, theme(colors.zinc.700) 70%, transparent);
+
+  /* === Interactive === */
+  --1t-btn-primary-bg: theme(colors.zinc.100);
+  --1t-btn-primary-text: theme(colors.zinc.950);
+  --1t-btn-primary-hover: theme(colors.zinc.300);
+  --1t-btn-ghost-border: theme(colors.zinc.700);
+  --1t-btn-ghost-text: theme(colors.zinc.100);
+  --1t-btn-ghost-hover-border: theme(colors.zinc.100);
+
+  /* === Navigation === */
+  --1t-nav-bg-scrolled: color-mix(in oklch, theme(colors.zinc.950) 75%, transparent);
+}

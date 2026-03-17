@@ -17,9 +17,18 @@ const inter = localFont({
 });
 
 export const metadata: Metadata = {
-  title: 'OpenMAIC',
+  metadataBase: new URL('https://labs.1team.io'),
+  title: '1Team Labs | AI Interactive Classroom',
   description:
-    'The open-source AI interactive classroom. Upload a PDF to instantly generate an immersive, multi-agent learning experience.',
+    'AI-powered interactive learning by 1Team Technologies. Upload a PDF to instantly generate an immersive, multi-agent learning experience.',
+  openGraph: {
+    title: '1Team Labs',
+    description: 'AI-powered interactive learning by 1Team Technologies.',
+    url: 'https://labs.1team.io',
+    siteName: '1Team Labs',
+    locale: 'en_US',
+    type: 'website',
+  },
 };
 
 export default function RootLayout({

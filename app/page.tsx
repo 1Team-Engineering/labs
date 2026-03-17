@@ -46,6 +46,7 @@ import { toast } from 'sonner';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useDraftCache } from '@/lib/hooks/use-draft-cache';
 import { SpeechButton } from '@/components/audio/speech-button';
+import Image from 'next/image';
 
 const log = createLogger('Home');
 
@@ -323,7 +324,25 @@ function HomePage() {
   };
 
   return (
-    <div className="min-h-[100dvh] w-full bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 flex flex-col items-center p-4 pt-16 md:p-8 md:pt-16 overflow-x-hidden">
+    <div className="min-h-[100dvh] w-full bg-gradient-to-b from-zinc-50 to-zinc-100 dark:from-zinc-950 dark:to-zinc-900 flex flex-col items-center p-4 pt-16 md:p-8 md:pt-16 overflow-x-hidden">
+      {/* ═══ 1Team branded top-left link ═══ */}
+      <a
+        href="https://1team.io"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="fixed top-4 left-4 z-50 flex items-center gap-2 rounded-full bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md border border-zinc-200/60 dark:border-zinc-700/60 px-3 py-1.5 shadow-sm transition-all hover:border-zinc-300 dark:hover:border-zinc-600"
+      >
+        <Image
+          src="/logo/1team-logo.png"
+          alt="1Team Technologies"
+          width={72}
+          height={21}
+          className="h-[18px] w-auto"
+        />
+        <span className="text-[10px] text-zinc-400 dark:text-zinc-500 font-medium tracking-wide">
+          Labs
+        </span>
+      </a>
       {/* ═══ Top-right pill (unchanged) ═══ */}
       <div
         ref={toolbarRef}
@@ -470,14 +489,14 @@ function HomePage() {
         initialSection={settingsSection}
       />
 
-      {/* ═══ Background Decor ═══ */}
+      {/* ═══ Background Decor (1Team zinc palette) ═══ */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div
-          className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse"
+          className="absolute top-0 left-1/4 w-96 h-96 bg-zinc-400/10 dark:bg-zinc-600/10 rounded-full blur-3xl animate-pulse"
           style={{ animationDuration: '4s' }}
         />
         <div
-          className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse"
+          className="absolute bottom-0 right-1/4 w-96 h-96 bg-zinc-500/10 dark:bg-zinc-400/8 rounded-full blur-3xl animate-pulse"
           style={{ animationDuration: '6s' }}
         />
       </div>
@@ -684,10 +703,42 @@ function HomePage() {
         </motion.div>
       )}
 
-      {/* Footer — flows with content, at the very end */}
-      <div className="mt-auto pt-12 pb-4 text-center text-xs text-muted-foreground/40">
-        OpenMAIC Open Source Project
-      </div>
+      {/* ═══ 1Team Footer ═══ */}
+      <footer className="mt-auto w-full pt-12 pb-6 border-t border-zinc-200/60 dark:border-zinc-800/60">
+        <div className="mx-auto max-w-7xl px-4 flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <a
+              href="https://1team.io"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex rounded-full bg-white px-3 py-1 dark:bg-zinc-100"
+            >
+              <Image
+                src="/logo/1team-logo.png"
+                alt="1Team Technologies"
+                width={72}
+                height={21}
+                className="h-[18px] w-auto"
+              />
+            </a>
+            <span className="text-xs text-zinc-400 dark:text-zinc-500">Labs</span>
+          </div>
+          <p className="text-xs text-zinc-400 dark:text-zinc-500 text-center">
+            AI-powered interactive learning by{' '}
+            <a
+              href="https://1team.io"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline underline-offset-2 hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors"
+            >
+              1Team Technologies
+            </a>
+          </p>
+          <p className="text-xs text-zinc-400 dark:text-zinc-500">
+            © {new Date().getFullYear()} 1Team Technologies
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }
