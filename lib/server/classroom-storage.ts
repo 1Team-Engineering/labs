@@ -2,6 +2,7 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import type { NextRequest } from 'next/server';
 import type { Scene, Stage } from '@/lib/types/stage';
+import { createAdminClient } from '@/lib/supabase/admin';
 
 export const CLASSROOMS_DIR = path.join(process.cwd(), 'data', 'classrooms');
 export const CLASSROOM_JOBS_DIR = path.join(process.cwd(), 'data', 'classroom-jobs');
@@ -63,6 +64,7 @@ export async function persistClassroom(
     id: string;
     stage: Stage;
     scenes: Scene[];
+    userId?: string;
   },
   baseUrl: string,
 ): Promise<PersistedClassroomData & { url: string }> {
@@ -76,6 +78,22 @@ export async function persistClassroom(
   await ensureClassroomsDir();
   const filePath = path.join(CLASSROOMS_DIR, `${data.id}.json`);
   await writeJsonFileAtomic(filePath, classroomData);
+
+  if (data.userId) {
+    try {
+      const supabase = createAdminClient();
+      const title = (data.stage as { config?: { title?: string } }).config?.title ?? data.id;
+      await supabase.from('classrooms').upsert({
+        id: data.id,
+        title,
+        created_by: data.userId,
+        data: { stage: data.stage, scenes: data.scenes },
+        created_at: classroomData.createdAt,
+      });
+    } catch (err) {
+      console.error('[classroom-storage] Supabase write failed (file fallback used):', err);
+    }
+  }
 
   return {
     ...classroomData,

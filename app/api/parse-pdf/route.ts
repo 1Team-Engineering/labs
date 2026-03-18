@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 import { parsePDF } from '@/lib/pdf/pdf-providers';
-import { resolvePDFApiKey, resolvePDFBaseUrl } from '@/lib/server/provider-config';
+import { resolvePDFApiKeyAsync, resolvePDFBaseUrl } from '@/lib/server/provider-config';
 import type { PDFProviderId } from '@/lib/pdf/types';
 import type { ParsedPdfContent } from '@/lib/types/pdf';
 import { createLogger } from '@/lib/logger';
@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
 
     const config = {
       providerId: effectiveProviderId,
-      apiKey: resolvePDFApiKey(effectiveProviderId, apiKey || undefined),
+      apiKey: await resolvePDFApiKeyAsync(effectiveProviderId),
       baseUrl: resolvePDFBaseUrl(effectiveProviderId, baseUrl || undefined),
     };
 

@@ -16,7 +16,7 @@
 
 import { NextRequest } from 'next/server';
 import { testVideoConnectivity } from '@/lib/media/video-providers';
-import { resolveVideoApiKey, resolveVideoBaseUrl } from '@/lib/server/provider-config';
+import { resolveVideoApiKeyAsync, resolveVideoBaseUrl } from '@/lib/server/provider-config';
 import type { VideoProviderId } from '@/lib/media/types';
 import { apiError, apiSuccess } from '@/lib/server/api-response';
 import { createLogger } from '@/lib/logger';
@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
     const clientApiKey = request.headers.get('x-api-key') || undefined;
     const clientBaseUrl = request.headers.get('x-base-url') || undefined;
 
-    const apiKey = resolveVideoApiKey(providerId, clientApiKey);
+    const apiKey = await resolveVideoApiKeyAsync(providerId);
     const baseUrl = resolveVideoBaseUrl(providerId, clientBaseUrl);
 
     if (!apiKey) {

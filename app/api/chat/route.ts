@@ -15,7 +15,11 @@
 import { NextRequest } from 'next/server';
 import { statelessGenerate } from '@/lib/orchestration/stateless-generate';
 import { getModel, parseModelString } from '@/lib/ai/providers';
-import { resolveApiKey, resolveBaseUrl, resolveProxy } from '@/lib/server/provider-config';
+import {
+  resolveApiKeyAsync,
+  resolveBaseUrlAsync,
+  resolveProxy,
+} from '@/lib/server/provider-config';
 import type { StatelessChatRequest, StatelessEvent } from '@/lib/types/chat';
 import type { ThinkingConfig } from '@/lib/types/provider';
 import { apiError } from '@/lib/server/api-response';
@@ -63,8 +67,8 @@ export async function POST(req: NextRequest) {
     // Resolve API key: client > server > empty
     const modelString = body.model || 'gpt-4o-mini';
     const { providerId, modelId } = parseModelString(modelString);
-    const effectiveApiKey = resolveApiKey(providerId, body.apiKey);
-    const effectiveBaseUrl = resolveBaseUrl(providerId, body.baseUrl);
+    const effectiveApiKey = await resolveApiKeyAsync(providerId);
+    const effectiveBaseUrl = await resolveBaseUrlAsync(providerId);
     const proxy = resolveProxy(providerId);
 
     if (!effectiveApiKey) {

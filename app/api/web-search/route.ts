@@ -6,7 +6,7 @@
  */
 
 import { searchWithTavily, formatSearchResultsAsContext } from '@/lib/web-search/tavily';
-import { resolveWebSearchApiKey } from '@/lib/server/provider-config';
+import { resolveWebSearchApiKeyAsync } from '@/lib/server/provider-config';
 import { createLogger } from '@/lib/logger';
 import { apiError, apiSuccess } from '@/lib/server/api-response';
 
@@ -24,7 +24,7 @@ export async function POST(req: Request) {
       return apiError('MISSING_REQUIRED_FIELD', 400, 'query is required');
     }
 
-    const apiKey = resolveWebSearchApiKey(clientApiKey);
+    const apiKey = await resolveWebSearchApiKeyAsync('tavily');
     if (!apiKey) {
       return apiError(
         'MISSING_API_KEY',

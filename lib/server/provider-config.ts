@@ -9,6 +9,7 @@ import fs from 'fs';
 import path from 'path';
 import yaml from 'js-yaml';
 import { createLogger } from '@/lib/logger';
+import { getOrgSettings } from '@/lib/org-settings';
 
 const log = createLogger('ServerProviderConfig');
 
@@ -232,9 +233,8 @@ export function getServerProviders(): Record<string, { models?: string[]; baseUr
   return result;
 }
 
-/** Resolve API key: client key > server key > empty string */
-export function resolveApiKey(providerId: string, clientKey?: string): string {
-  if (clientKey) return clientKey;
+/** Resolve API key: server key > empty string */
+export function resolveApiKey(providerId: string, _clientKey?: string): string {
   return getConfig().providers[providerId]?.apiKey || '';
 }
 
@@ -263,8 +263,7 @@ export function getServerTTSProviders(): Record<string, { baseUrl?: string }> {
   return result;
 }
 
-export function resolveTTSApiKey(providerId: string, clientKey?: string): string {
-  if (clientKey) return clientKey;
+export function resolveTTSApiKey(providerId: string, _clientKey?: string): string {
   return getConfig().tts[providerId]?.apiKey || '';
 }
 
@@ -287,8 +286,7 @@ export function getServerASRProviders(): Record<string, { baseUrl?: string }> {
   return result;
 }
 
-export function resolveASRApiKey(providerId: string, clientKey?: string): string {
-  if (clientKey) return clientKey;
+export function resolveASRApiKey(providerId: string, _clientKey?: string): string {
   return getConfig().asr[providerId]?.apiKey || '';
 }
 
@@ -311,8 +309,7 @@ export function getServerPDFProviders(): Record<string, { baseUrl?: string }> {
   return result;
 }
 
-export function resolvePDFApiKey(providerId: string, clientKey?: string): string {
-  if (clientKey) return clientKey;
+export function resolvePDFApiKey(providerId: string, _clientKey?: string): string {
   return getConfig().pdf[providerId]?.apiKey || '';
 }
 
@@ -334,8 +331,7 @@ export function getServerImageProviders(): Record<string, Record<string, never>>
   return result;
 }
 
-export function resolveImageApiKey(providerId: string, clientKey?: string): string {
-  if (clientKey) return clientKey;
+export function resolveImageApiKey(providerId: string, _clientKey?: string): string {
   return getConfig().image[providerId]?.apiKey || '';
 }
 
@@ -360,8 +356,7 @@ export function getServerVideoProviders(): Record<string, Record<string, never>>
   return result;
 }
 
-export function resolveVideoApiKey(providerId: string, clientKey?: string): string {
-  if (clientKey) return clientKey;
+export function resolveVideoApiKey(providerId: string, _clientKey?: string): string {
   return getConfig().video[providerId]?.apiKey || '';
 }
 
@@ -388,10 +383,86 @@ export function getServerWebSearchProviders(): Record<string, { baseUrl?: string
   return result;
 }
 
-/** Resolve Tavily API key: client key > server key > TAVILY_API_KEY env > empty */
-export function resolveWebSearchApiKey(clientKey?: string): string {
-  if (clientKey) return clientKey;
+/** Resolve Tavily API key: server key > TAVILY_API_KEY env > empty */
+export function resolveWebSearchApiKey(_clientKey?: string): string {
   const serverKey = getConfig().webSearch.tavily?.apiKey;
   if (serverKey) return serverKey;
   return process.env.TAVILY_API_KEY || '';
+}
+
+// ---------------------------------------------------------------------------
+// Async resolve functions — check server config first, then fall back to
+// org_settings stored in Supabase (set by admin via the settings UI).
+// ---------------------------------------------------------------------------
+
+type ProviderCfg = Record<string, { apiKey?: string; baseUrl?: string }>;
+
+// ── LLM providers ────────────────────────────────────────────────────────────
+export async function resolveApiKeyAsync(providerId: string): Promise<string> {
+  const serverKey = getConfig().providers[providerId]?.apiKey;
+  if (serverKey) return serverKey;
+  const org = await getOrgSettings<ProviderCfg>('providers');
+  return org?.[providerId]?.apiKey ?? '';
+}
+
+export async function resolveBaseUrlAsync(providerId: string): Promise<string | undefined> {
+  const serverUrl = getConfig().providers[providerId]?.baseUrl;
+  if (serverUrl) return serverUrl;
+  const org = await getOrgSettings<ProviderCfg>('providers');
+  return org?.[providerId]?.baseUrl;
+}
+
+// ── TTS ───────────────────────────────────────────────────────────────────────
+export async function resolveTTSApiKeyAsync(providerId: string): Promise<string> {
+  const serverKey = getConfig().tts[providerId]?.apiKey;
+  if (serverKey) return serverKey;
+  const org = await getOrgSettings<ProviderCfg>('tts');
+  return org?.[providerId]?.apiKey ?? '';
+}
+
+export async function resolveTTSBaseUrlAsync(providerId: string): Promise<string | undefined> {
+  const serverUrl = getConfig().tts[providerId]?.baseUrl;
+  if (serverUrl) return serverUrl;
+  const org = await getOrgSettings<ProviderCfg>('tts');
+  return org?.[providerId]?.baseUrl;
+}
+
+// ── ASR ───────────────────────────────────────────────────────────────────────
+export async function resolveASRApiKeyAsync(providerId: string): Promise<string> {
+  const serverKey = getConfig().asr[providerId]?.apiKey;
+  if (serverKey) return serverKey;
+  const org = await getOrgSettings<ProviderCfg>('asr');
+  return org?.[providerId]?.apiKey ?? '';
+}
+
+// ── PDF ───────────────────────────────────────────────────────────────────────
+export async function resolvePDFApiKeyAsync(providerId: string): Promise<string> {
+  const serverKey = getConfig().pdf[providerId]?.apiKey;
+  if (serverKey) return serverKey;
+  const org = await getOrgSettings<ProviderCfg>('pdf');
+  return org?.[providerId]?.apiKey ?? '';
+}
+
+// ── Image generation ──────────────────────────────────────────────────────────
+export async function resolveImageApiKeyAsync(providerId: string): Promise<string> {
+  const serverKey = getConfig().image[providerId]?.apiKey;
+  if (serverKey) return serverKey;
+  const org = await getOrgSettings<ProviderCfg>('image');
+  return org?.[providerId]?.apiKey ?? '';
+}
+
+// ── Video generation ──────────────────────────────────────────────────────────
+export async function resolveVideoApiKeyAsync(providerId: string): Promise<string> {
+  const serverKey = getConfig().video[providerId]?.apiKey;
+  if (serverKey) return serverKey;
+  const org = await getOrgSettings<ProviderCfg>('video');
+  return org?.[providerId]?.apiKey ?? '';
+}
+
+// ── Web search ────────────────────────────────────────────────────────────────
+export async function resolveWebSearchApiKeyAsync(providerId: string): Promise<string> {
+  const serverKey = getConfig().webSearch[providerId]?.apiKey;
+  if (serverKey) return serverKey;
+  const org = await getOrgSettings<ProviderCfg>('web-search');
+  return org?.[providerId]?.apiKey ?? '';
 }

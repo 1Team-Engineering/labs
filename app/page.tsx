@@ -47,6 +47,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { useDraftCache } from '@/lib/hooks/use-draft-cache';
 import { SpeechButton } from '@/components/audio/speech-button';
 import Image from 'next/image';
+import { LibrarySection } from '@/components/home/library-section';
 
 const log = createLogger('Home');
 
@@ -77,6 +78,7 @@ function HomePage() {
   const [settingsSection, setSettingsSection] = useState<
     import('@/lib/types/settings').SettingsSection | undefined
   >(undefined);
+  const [userRole, setUserRole] = useState<'admin' | 'employee' | null>(null);
 
   // Draft cache for requirement text
   const { cachedValue: cachedRequirement, updateCache: updateRequirementCache } =
@@ -172,6 +174,26 @@ function HomePage() {
 
     // eslint-disable-next-line react-hooks/set-state-in-effect -- Store hydration on mount
     loadClassrooms();
+  }, []);
+
+  useEffect(() => {
+    async function fetchRole() {
+      const { createClient } = await import('@/lib/supabase/client');
+      const supabase = createClient();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (!session) return;
+      try {
+        const payload = JSON.parse(atob(session.access_token.split('.')[1])) as {
+          user_role?: string;
+        };
+        setUserRole((payload.user_role as 'admin' | 'employee') ?? 'employee');
+      } catch {
+        setUserRole('employee');
+      }
+    }
+    void fetchRole();
   }, []);
 
   const handleDelete = (id: string, e: React.MouseEvent) => {
@@ -457,28 +479,30 @@ function HomePage() {
         <div className="w-[1px] h-4 bg-zinc-200 dark:bg-zinc-700" />
 
         {/* Settings Button */}
-        <div className="relative">
-          <button
-            onClick={() => setSettingsOpen(true)}
-            className={cn(
-              'p-2 rounded-full text-zinc-400 dark:text-zinc-500 hover:bg-white dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-zinc-100 hover:shadow-sm transition-all group',
-              needsSetup && 'animate-setup-glow',
+        {userRole === 'admin' && (
+          <div className="relative">
+            <button
+              onClick={() => setSettingsOpen(true)}
+              className={cn(
+                'p-2 rounded-full text-zinc-400 dark:text-zinc-500 hover:bg-white dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-zinc-100 hover:shadow-sm transition-all group',
+                needsSetup && 'animate-setup-glow',
+              )}
+            >
+              <Settings className="w-4 h-4 group-hover:rotate-90 transition-transform duration-500" />
+            </button>
+            {needsSetup && (
+              <>
+                <span className="absolute -top-0.5 -right-0.5 flex h-3 w-3">
+                  <span className="animate-setup-ping absolute inline-flex h-full w-full rounded-full bg-zinc-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-3 w-3 bg-zinc-500" />
+                </span>
+                <span className="animate-setup-float absolute top-full mt-2 right-0 whitespace-nowrap text-[11px] font-medium text-zinc-700 dark:text-zinc-300 bg-zinc-100 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 px-2 py-0.5 rounded-full shadow-sm pointer-events-none">
+                  {t('settings.setupNeeded')}
+                </span>
+              </>
             )}
-          >
-            <Settings className="w-4 h-4 group-hover:rotate-90 transition-transform duration-500" />
-          </button>
-          {needsSetup && (
-            <>
-              <span className="absolute -top-0.5 -right-0.5 flex h-3 w-3">
-                <span className="animate-setup-ping absolute inline-flex h-full w-full rounded-full bg-zinc-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-3 w-3 bg-zinc-500" />
-              </span>
-              <span className="animate-setup-float absolute top-full mt-2 right-0 whitespace-nowrap text-[11px] font-medium text-zinc-700 dark:text-zinc-300 bg-zinc-100 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 px-2 py-0.5 rounded-full shadow-sm pointer-events-none">
-                {t('settings.setupNeeded')}
-              </span>
-            </>
-          )}
-        </div>
+          </div>
+        )}
       </div>
       <SettingsDialog
         open={settingsOpen}
@@ -709,6 +733,11 @@ function HomePage() {
           </AnimatePresence>
         </motion.div>
       )}
+
+      {/* ═══ Library Section ═══ */}
+      <div className="w-full max-w-7xl px-4 mx-auto">
+        <LibrarySection />
+      </div>
 
       {/* ═══ 1Team Footer ═══ */}
       <footer className="mt-auto w-full pt-12 pb-6 border-t border-zinc-200/60 dark:border-zinc-800/60">

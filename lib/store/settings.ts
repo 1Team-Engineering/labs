@@ -19,6 +19,18 @@ import { createLogger } from '@/lib/logger';
 
 const log = createLogger('Settings');
 
+async function syncCategoryToSupabase(category: string, config: unknown): Promise<void> {
+  try {
+    await fetch('/api/admin/settings', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ category, config }),
+    });
+  } catch {
+    // Non-fatal — local state is still saved to localStorage
+  }
+}
+
 /** Available playback speed tiers */
 export const PLAYBACK_SPEEDS = [1, 1.5, 2] as const;
 export type PlaybackSpeed = (typeof PLAYBACK_SPEEDS)[number];
@@ -420,7 +432,7 @@ const migrateFromOldStorage = () => {
 
 export const useSettingsStore = create<SettingsState>()(
   persist(
-    (set) => {
+    (set, get) => {
       // Try to migrate from old storage
       const migratedData = migrateFromOldStorage();
       const defaultAudioConfig = getDefaultAudioConfig();
@@ -479,7 +491,7 @@ export const useSettingsStore = create<SettingsState>()(
         // Actions
         setModel: (providerId, modelId) => set({ providerId, modelId }),
 
-        setProviderConfig: (providerId, config) =>
+        setProviderConfig: (providerId, config) => {
           set((state) => ({
             providersConfig: {
               ...state.providersConfig,
@@ -488,9 +500,14 @@ export const useSettingsStore = create<SettingsState>()(
                 ...config,
               },
             },
-          })),
+          }));
+          void syncCategoryToSupabase('providers', get().providersConfig);
+        },
 
-        setProvidersConfig: (config) => set({ providersConfig: config }),
+        setProvidersConfig: (config) => {
+          set({ providersConfig: config });
+          void syncCategoryToSupabase('providers', get().providersConfig);
+        },
 
         setTtsModel: (model) => set({ ttsModel: model }),
 
@@ -532,7 +549,7 @@ export const useSettingsStore = create<SettingsState>()(
 
         setASRLanguage: (language) => set({ asrLanguage: language }),
 
-        setTTSProviderConfig: (providerId, config) =>
+        setTTSProviderConfig: (providerId, config) => {
           set((state) => ({
             ttsProvidersConfig: {
               ...state.ttsProvidersConfig,
@@ -541,9 +558,11 @@ export const useSettingsStore = create<SettingsState>()(
                 ...config,
               },
             },
-          })),
+          }));
+          void syncCategoryToSupabase('tts', get().ttsProvidersConfig);
+        },
 
-        setASRProviderConfig: (providerId, config) =>
+        setASRProviderConfig: (providerId, config) => {
           set((state) => ({
             asrProvidersConfig: {
               ...state.asrProvidersConfig,
@@ -552,12 +571,14 @@ export const useSettingsStore = create<SettingsState>()(
                 ...config,
               },
             },
-          })),
+          }));
+          void syncCategoryToSupabase('asr', get().asrProvidersConfig);
+        },
 
         // PDF actions
         setPDFProvider: (providerId) => set({ pdfProviderId: providerId }),
 
-        setPDFProviderConfig: (providerId, config) =>
+        setPDFProviderConfig: (providerId, config) => {
           set((state) => ({
             pdfProvidersConfig: {
               ...state.pdfProvidersConfig,
@@ -566,13 +587,15 @@ export const useSettingsStore = create<SettingsState>()(
                 ...config,
               },
             },
-          })),
+          }));
+          void syncCategoryToSupabase('pdf', get().pdfProvidersConfig);
+        },
 
         // Image Generation actions
         setImageProvider: (providerId) => set({ imageProviderId: providerId }),
         setImageModelId: (modelId) => set({ imageModelId: modelId }),
 
-        setImageProviderConfig: (providerId, config) =>
+        setImageProviderConfig: (providerId, config) => {
           set((state) => ({
             imageProvidersConfig: {
               ...state.imageProvidersConfig,
@@ -581,13 +604,15 @@ export const useSettingsStore = create<SettingsState>()(
                 ...config,
               },
             },
-          })),
+          }));
+          void syncCategoryToSupabase('image', get().imageProvidersConfig);
+        },
 
         // Video Generation actions
         setVideoProvider: (providerId) => set({ videoProviderId: providerId }),
         setVideoModelId: (modelId) => set({ videoModelId: modelId }),
 
-        setVideoProviderConfig: (providerId, config) =>
+        setVideoProviderConfig: (providerId, config) => {
           set((state) => ({
             videoProvidersConfig: {
               ...state.videoProvidersConfig,
@@ -596,7 +621,9 @@ export const useSettingsStore = create<SettingsState>()(
                 ...config,
               },
             },
-          })),
+          }));
+          void syncCategoryToSupabase('video', get().videoProvidersConfig);
+        },
 
         // Media generation toggle actions
         setImageGenerationEnabled: (enabled) => set({ imageGenerationEnabled: enabled }),
@@ -606,7 +633,7 @@ export const useSettingsStore = create<SettingsState>()(
 
         // Web Search actions
         setWebSearchProvider: (providerId) => set({ webSearchProviderId: providerId }),
-        setWebSearchProviderConfig: (providerId, config) =>
+        setWebSearchProviderConfig: (providerId, config) => {
           set((state) => ({
             webSearchProvidersConfig: {
               ...state.webSearchProvidersConfig,
@@ -615,7 +642,9 @@ export const useSettingsStore = create<SettingsState>()(
                 ...config,
               },
             },
-          })),
+          }));
+          void syncCategoryToSupabase('web-search', get().webSearchProvidersConfig);
+        },
 
         // Fetch server-configured providers and merge into local state
         fetchServerProviders: async () => {
