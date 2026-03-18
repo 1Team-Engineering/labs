@@ -1,14 +1,10 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/admin';
+import { requireAdmin } from '@/lib/auth/require-admin';
 
 export async function GET() {
-  const supabase = await createClient();
-  const { data: { session } } = await supabase.auth.getSession();
-  if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-
-  const userRole = (JSON.parse(atob(session.access_token.split('.')[1])) as { user_role?: string }).user_role;
-  if (userRole !== 'admin') return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  const { error: authError } = await requireAdmin();
+  if (authError) return authError;
 
   const admin = createAdminClient();
   const { data, error } = await admin

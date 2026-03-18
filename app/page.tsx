@@ -10,6 +10,7 @@ import {
   Clock,
   Copy,
   ImagePlus,
+  LayoutDashboard,
   Pencil,
   Trash2,
   Settings,
@@ -19,6 +20,7 @@ import {
   BotOff,
   ChevronUp,
 } from 'lucide-react';
+import Link from 'next/link';
 import { useI18n } from '@/lib/hooks/use-i18n';
 import { createLogger } from '@/lib/logger';
 import { Button } from '@/components/ui/button';
@@ -477,6 +479,18 @@ function HomePage() {
         </div>
 
         <div className="w-[1px] h-4 bg-zinc-200 dark:bg-zinc-700" />
+
+        {/* Admin Link + Settings Button */}
+        {userRole === 'admin' && (
+          <Link
+            href="/admin"
+            className="p-2 rounded-full text-zinc-400 dark:text-zinc-500 hover:bg-white dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-zinc-100 hover:shadow-sm transition-all flex items-center gap-1 text-xs font-medium"
+            aria-label="Admin Dashboard"
+          >
+            <LayoutDashboard className="w-4 h-4" />
+            <span>Admin</span>
+          </Link>
+        )}
 
         {/* Settings Button */}
         {userRole === 'admin' && (
